@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.rclinux.omapasswords",
+  "name": "OmaPasswords",
+  "version": "0.1.0",
+  "author": "Ronald Craig",
+  "license": "MIT",
+  "description": "Strong random passwords one click from the bar, made from your system's secure random source.",
+  "kinds": ["bar-widget"],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "OmaPasswords",
+    "description": "A padlock that opens three fresh random passwords. Click one to copy it.",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "clearAfter": 30,
+      "showBits": true
+    },
+    "schema": [
+      { "key": "clearAfter", "type": "integer", "label": "Clear clipboard after (seconds)", "min": 0, "max": 600, "step": 5, "defaultValue": 30, "description": "Empties the clipboard this long after a copy, if it still holds the password. 0 leaves it alone." },
+      { "key": "showBits", "type": "boolean", "label": "Show strength in bits", "defaultValue": true }
+    ]
+  }
+}
