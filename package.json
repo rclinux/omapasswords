@@ -1,6 +1,6 @@
 {
   "name": "omapasswords",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Test runner for the OmaPasswords Omarchy plugin. The plugin itself has no dependencies.",
   "license": "MIT",

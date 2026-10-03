@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "io.github.rclinux.omapasswords",
   "name": "OmaPasswords",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Ronald Craig",
   "license": "MIT",
   "description": "Strong random passwords one click from the bar, made from your system's secure random source.",

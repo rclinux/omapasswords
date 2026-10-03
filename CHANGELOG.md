@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.1
+
+Fixes.
+
+- Closing the panel while new passwords were still being read could bring them back into the hidden panel. They are now dropped.
+- Copying another password just as the clipboard check for the previous one ran could clear the new copy at once, or stop it from being cleared later. Each check now applies only to its own copy.
+- With clipboard clearing turned off, the last copied password was kept in memory. It is no longer kept.
+
 ## 0.1.0
 
 First release.

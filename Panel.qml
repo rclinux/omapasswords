@@ -37,6 +37,8 @@ Panel {
   property int cursor: 0
   property int copiedIndex: -1
   property string lastCopied: ""      // only kept until the clipboard is cleared
+  property int copyCount: 0           // bumped on every copy
+  property int checkingCopy: 0        // which copy the running clipboard check belongs to
   property string pendingCopy: ""     // handed to wl-copy's stdin, then dropped
   property int remaining: 0           // seconds until the clipboard is cleared
   property string toast: ""
@@ -73,6 +75,8 @@ Panel {
   }
 
   function useBytes(text) {
+    // A read that finishes after the panel closed must not bring the passwords back.
+    if (!root.opened) return
     var bytes = Gen.parseOd(text)
     if (!bytes || bytes.length < Gen.BYTES_PER_READ) {
       fail()
@@ -111,7 +115,9 @@ Panel {
     if (status !== "ready" || index < 0 || index >= values.length || values[index] === "") return
     if (copyProc.running) return
     pendingCopy = values[index]
-    lastCopied = values[index]
+    // Only kept for the clipboard check; with clearing off there is no check.
+    lastCopied = clearAfter > 0 ? values[index] : ""
+    copyCount += 1
     copiedIndex = index
     cursor = index
     copyProc.stdinEnabled = true
@@ -145,7 +151,10 @@ Panel {
     running: root.remaining > 0
     onTriggered: {
       root.remaining -= 1
-      if (root.remaining <= 0) pasteProc.running = true
+      if (root.remaining <= 0) {
+        root.checkingCopy = root.copyCount
+        pasteProc.running = true
+      }
     }
   }
 
@@ -155,6 +164,8 @@ Panel {
     command: ["wl-paste", "-n"]
     stdout: StdioCollector {
       onStreamFinished: {
+        // A newer copy started while this check ran; it has its own countdown.
+        if (root.checkingCopy !== root.copyCount) return
         if (root.lastCopied !== "" && text === root.lastCopied) {
           clearProc.running = true
           root.toast = "Clipboard cleared"
